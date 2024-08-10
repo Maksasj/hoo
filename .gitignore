@@ -1,0 +1,6 @@
+bin
+obj
+.vs
+HooService.csproj.user
+HooService.http
+appsettings.Development.json
