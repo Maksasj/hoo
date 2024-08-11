@@ -4,18 +4,21 @@ using Microsoft.Graph.Models;
 using Azure.Identity;
 using Azure.Core;
 using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
+using Microsoft.Graph.Reports.GetPrinterArchivedPrintJobsWithPrinterIdWithStartDateTimeWithEndDateTime;
+using HooService.Repository;
 
 namespace HooService.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class HooController : ControllerBase
     {
         private readonly ILogger<HooController> _logger;
+        private readonly GoogleDriveRepository _gooleDrive;
 
-        public HooController(ILogger<HooController> logger)
+        public HooController(ILogger<HooController> logger, GoogleDriveRepository gooleDrive)
         {
             _logger = logger;
+            _gooleDrive = gooleDrive;
         }
 
         private GraphServiceClient CreateGraphClient(string tenantId, string clientId)
@@ -34,7 +37,8 @@ namespace HooService.Controllers
         }
 
         [HttpGet]
-        public async Task Get()
+        [Route("Get")]
+        public async Task<IActionResult> Get()
         {
             var client = CreateGraphClient("****", "****");
 
@@ -49,6 +53,20 @@ namespace HooService.Controllers
             var rootItem = await client.Drives[userDriveId].Root.GetAsync();
             _logger.LogInformation(rootItem.ToString());
             */
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("GetOther")]
+        public async Task<IActionResult> GetOther()
+        {
+            foreach (var file in _gooleDrive.GetFiles("root"))
+            {
+                Console.WriteLine(file.Name);
+            }
+
+            return Ok();
         }
     }
 }
