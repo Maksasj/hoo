@@ -13,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IGoogleSourceDrive, GoogleSourceDrive>();
-builder.Services.AddTransient<IOneDriveSource, OneDriveSource>();
+builder.Services.AddTransient<IOneSourceDrive, OneSourceDrive>();
 
 builder.Services.AddTransient<IFileProvider, HooFileProvider>();
 

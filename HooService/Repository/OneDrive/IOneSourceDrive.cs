@@ -1,6 +1,6 @@
 ﻿namespace HooService.Repository.OneDrive
 {
-    public interface IOneDriveSource
+    public interface IOneSourceDrive
     {
         public void Do();
     }
