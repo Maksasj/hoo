@@ -1,6 +1,6 @@
 ﻿namespace HooService.Repository
 {
-    public interface ISourceRepositor
+    public interface IFileProvider
     {
     }
 }

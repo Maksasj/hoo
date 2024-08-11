@@ -1,5 +1,7 @@
 using HooService;
 using HooService.Repository;
+using HooService.Repository.GoogleDrive;
+using HooService.Repository.OneDrive;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +12,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddTransient<GoogleDriveRepository>();
+builder.Services.AddTransient<IGoogleSourceDrive, GoogleSourceDrive>();
+builder.Services.AddTransient<IOneDriveSource, OneDriveSource>();
+
+builder.Services.AddTransient<IFileProvider, HooFileProvider>();
 
 var app = builder.Build();
 

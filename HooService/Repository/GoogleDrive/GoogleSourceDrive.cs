@@ -11,17 +11,21 @@ using System.Text;
 using System.Threading.Tasks;
 using Azure.Core;
 
-namespace HooService.Repository
+namespace HooService.Repository.GoogleDrive
 {
-    public class GoogleDriveRepository : ISourceRepositor
+    public class GoogleSourceDrive : IGoogleSourceDrive
     {
+        private readonly ILogger<GoogleSourceDrive> _logger;
+        private DriveService _driveService { get; }
 
-        private DriveService driveService { get; }
-
-        public GoogleDriveRepository(IConfiguration configuration)
+        public GoogleSourceDrive(ILogger<GoogleSourceDrive> logger, IConfiguration configuration)
         {
-            Console.WriteLine(configuration.GetValue<string>("AccessToken"));
+            _logger = logger;
+            _driveService = InitializeDriveService(configuration);
+        }
 
+        private DriveService InitializeDriveService(IConfiguration configuration)
+        {
             var tokenResponse = new TokenResponse
             {
                 AccessToken = configuration.GetValue<string>("AccessToken"),
@@ -45,7 +49,7 @@ namespace HooService.Repository
 
             var credential = new UserCredential(apiCodeFlow, username, tokenResponse);
 
-            driveService = new DriveService(new BaseClientService.Initializer
+            return new DriveService(new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential,
                 ApplicationName = applicationName
@@ -54,7 +58,7 @@ namespace HooService.Repository
 
         public IEnumerable<Google.Apis.Drive.v3.Data.File> GetFiles(string folder)
         {
-            var fileList = driveService.Files.List();
+            var fileList = _driveService.Files.List();
             fileList.Q = $"mimeType!='application/vnd.google-apps.folder' and '{folder}' in parents";
             fileList.Fields = "nextPageToken, files(id, name, size, mimeType)";
 

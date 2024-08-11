@@ -5,7 +5,8 @@ using Azure.Identity;
 using Azure.Core;
 using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using Microsoft.Graph.Reports.GetPrinterArchivedPrintJobsWithPrinterIdWithStartDateTimeWithEndDateTime;
-using HooService.Repository;
+using HooService.Repository.GoogleDrive;
+using HooService.Repository.OneDrive;
 
 namespace HooService.Controllers
 {
@@ -13,46 +14,23 @@ namespace HooService.Controllers
     public class HooController : ControllerBase
     {
         private readonly ILogger<HooController> _logger;
-        private readonly GoogleDriveRepository _gooleDrive;
 
-        public HooController(ILogger<HooController> logger, GoogleDriveRepository gooleDrive)
+        private readonly IGoogleSourceDrive _googleGoogleSourceDrive;
+        private readonly IOneSourceDrive _oneSourceDrive;
+
+        public HooController(ILogger<HooController> logger, IGoogleSourceDrive gooleGoogleSourceDrive, IOneSourceDrive oneSourceDrive)
         {
             _logger = logger;
-            _gooleDrive = gooleDrive;
-        }
 
-        private GraphServiceClient CreateGraphClient(string tenantId, string clientId)
-        {
-            string[] scopes = { "User.Read" };
-
-            var options = new InteractiveBrowserCredentialOptions()
-            {
-                ClientId = clientId,
-                TenantId = tenantId
-            };
-
-            var credential = new InteractiveBrowserCredential(options);
-            
-            return new GraphServiceClient(credential, scopes);
+            _googleGoogleSourceDrive = gooleGoogleSourceDrive;
+            _oneSourceDrive = oneSourceDrive;
         }
 
         [HttpGet]
         [Route("Get")]
         public async Task<IActionResult> Get()
         {
-            var client = CreateGraphClient("****", "****");
-
-            _logger.LogInformation(client.ToString());
-
-            var count = await client.Applications.Count.GetAsync();
-
-            _logger.LogInformation(count.ToString());
-            /*
-            var userDriveId = drive.Id;
-
-            var rootItem = await client.Drives[userDriveId].Root.GetAsync();
-            _logger.LogInformation(rootItem.ToString());
-            */
+            _oneSourceDrive.Do();
 
             return Ok();
         }
@@ -61,7 +39,7 @@ namespace HooService.Controllers
         [Route("GetOther")]
         public async Task<IActionResult> GetOther()
         {
-            foreach (var file in _gooleDrive.GetFiles("root"))
+            foreach (var file in _googleGoogleSourceDrive.GetFiles("root"))
             {
                 Console.WriteLine(file.Name);
             }
