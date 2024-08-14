@@ -7,6 +7,16 @@ using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using Microsoft.Graph.Reports.GetPrinterArchivedPrintJobsWithPrinterIdWithStartDateTimeWithEndDateTime;
 using HooService.Repository.GoogleDrive;
 using HooService.Repository.OneDrive;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Graph;
+using Microsoft.Graph.Models;
+using Azure.Identity;
+using Azure.Core;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
+using Microsoft.Graph.Reports.GetPrinterArchivedPrintJobsWithPrinterIdWithStartDateTimeWithEndDateTime;
+using HooService.Repository.GoogleDrive;
+using HooService.Repository.OneDrive;
+using HooService.Common;
 
 namespace HooService.Controllers
 {
@@ -14,37 +24,26 @@ namespace HooService.Controllers
     public class HooController : ControllerBase
     {
         private readonly ILogger<HooController> _logger;
+        private readonly IFileProvider _fileProvider;
 
-        private readonly IGoogleSourceDrive _googleGoogleSourceDrive;
-        private readonly IOneSourceDrive _oneSourceDrive;
-
-        public HooController(ILogger<HooController> logger, IGoogleSourceDrive gooleGoogleSourceDrive, IOneSourceDrive oneSourceDrive)
+        public HooController(ILogger<HooController> logger, IFileProvider fileProvider)
         {
             _logger = logger;
-
-            _googleGoogleSourceDrive = gooleGoogleSourceDrive;
-            _oneSourceDrive = oneSourceDrive;
+            _fileProvider = fileProvider;
         }
 
         [HttpGet]
-        [Route("OneDrive")]
-        public async Task<IActionResult> OneDrive()
+        [Route("GetFile")]
+        public async Task<IActionResult> GetFile(string fileSourceId, string fileId)
         {
-            _oneSourceDrive.Do();
-
-            return Ok();
+            return await _fileProvider.GetFile(fileSourceId, fileId);
         }
 
         [HttpGet]
-        [Route("GoogleDrive")]
-        public async Task<IActionResult> GoogleDrive()
+        [Route("GetSource")]
+        public async Task<IActionResult> GetSource(string sourceId)
         {
-            foreach (var file in _googleGoogleSourceDrive.GetFiles("root"))
-            {
-                Console.WriteLine(file.Name);
-            }
-
-            return Ok();
+            return await _fileProvider.GetSource(sourceId);
         }
     }
 }

@@ -1,5 +1,5 @@
 using HooService;
-using HooService.Repository;
+using HooService.Common;
 using HooService.Repository.GoogleDrive;
 using HooService.Repository.OneDrive;
 
@@ -12,8 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddTransient<IGoogleSourceDrive, GoogleSourceDrive>();
-builder.Services.AddTransient<IOneSourceDrive, OneSourceDrive>();
+builder.Services.AddTransient<IGoogleDriveProvider, GoogleDriveProvider>();
+builder.Services.AddTransient<IOneDriveProvider, OneDriveProvider>();
 
 builder.Services.AddTransient<IFileProvider, HooFileProvider>();
 

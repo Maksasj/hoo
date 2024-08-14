@@ -13,12 +13,12 @@ using Azure.Core;
 
 namespace HooService.Repository.GoogleDrive
 {
-    public class GoogleSourceDrive : IGoogleSourceDrive
+    public class GoogleDriveSource : IGoogleDriveSource
     {
-        private readonly ILogger<GoogleSourceDrive> _logger;
+        private readonly ILogger<GoogleDriveSource> _logger;
         private DriveService _driveService { get; }
 
-        public GoogleSourceDrive(ILogger<GoogleSourceDrive> logger, IConfiguration configuration)
+        public GoogleDriveSource(ILogger<GoogleDriveSource> logger, IConfiguration configuration)
         {
             _logger = logger;
             _driveService = InitializeDriveService(configuration);

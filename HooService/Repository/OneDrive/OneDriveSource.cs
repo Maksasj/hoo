@@ -9,18 +9,19 @@ using Microsoft.Kiota.Abstractions.Authentication;
 
 namespace HooService.Repository.OneDrive
 {
-    public class OneSourceDrive : IOneSourceDrive
+    public class OneDriveSource : IOneDriveSource
     {
-        private readonly ILogger<OneSourceDrive> _logger;
+        private readonly ILogger<OneDriveSource> _logger;
         private readonly GraphServiceClient _graphClientClient;
         private readonly string _driveId;
 
-        public OneSourceDrive(ILogger<OneSourceDrive> logger, IConfiguration configuration)
+        public OneDriveSource(ILogger<OneDriveSource> logger, IConfiguration configuration)
         {
             _logger = logger;
             _graphClientClient = new GraphServiceClient(new SimpleAuthProvider(configuration.GetValue<string>("BearerToken")));
             _driveId = configuration.GetValue<string>("DriveId");
         }
+
         public async void Do()
         {
             var result = await _graphClientClient.Drives[_driveId].Items["root"].Children.GetAsync();
