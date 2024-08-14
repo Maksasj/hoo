@@ -27,8 +27,8 @@ namespace HooService.Controllers
         }
 
         [HttpGet]
-        [Route("Get")]
-        public async Task<IActionResult> Get()
+        [Route("OneDrive")]
+        public async Task<IActionResult> OneDrive()
         {
             _oneSourceDrive.Do();
 
@@ -36,8 +36,8 @@ namespace HooService.Controllers
         }
 
         [HttpGet]
-        [Route("GetOther")]
-        public async Task<IActionResult> GetOther()
+        [Route("GoogleDrive")]
+        public async Task<IActionResult> GoogleDrive()
         {
             foreach (var file in _googleGoogleSourceDrive.GetFiles("root"))
             {
