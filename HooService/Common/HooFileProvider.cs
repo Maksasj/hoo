@@ -28,7 +28,7 @@ namespace HooService.Common
             _oneDriveProvider = oneDriveProvider;
         }
 
-        public async Task<IActionResult> GetFile(string fileSourceId, string fileId)
+        public async Task<IActionResult> GetFile(string fileSourceId, string fileAccessString)
         {
             return new OkResult();
         }

@@ -15,12 +15,10 @@ namespace HooService.Repository.GoogleDrive
 {
     public class GoogleDriveSource : IGoogleDriveSource
     {
-        private readonly ILogger<GoogleDriveSource> _logger;
         private DriveService _driveService { get; }
 
-        public GoogleDriveSource(ILogger<GoogleDriveSource> logger, IConfiguration configuration)
+        public GoogleDriveSource(IConfiguration configuration)
         {
-            _logger = logger;
             _driveService = InitializeDriveService(configuration);
         }
 
