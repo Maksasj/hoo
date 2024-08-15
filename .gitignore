@@ -1,6 +1,6 @@
 bin
 obj
 .vs
-HooService.csproj.user
-HooService.http
+Hoo.Service.csproj.user
+Hoo.Service.http
 appsettings.Development.json
