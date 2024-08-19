@@ -17,9 +17,9 @@ namespace HooService.Controllers
 
         [HttpGet]
         [Route("GetFile")]
-        public async Task<IActionResult> GetFile(string fileSourceId, string fileAccessString)
+        public async Task<IActionResult> GetFile(string fileSourceId, string filePath)
         {
-            return await _fileProvider.GetFile(fileSourceId, fileAccessString);
+            return await _fileProvider.GetFile(fileSourceId, filePath);
         }
 
         [HttpGet]
@@ -27,6 +27,20 @@ namespace HooService.Controllers
         public async Task<IActionResult> GetSource(string sourceId)
         {
             return await _fileProvider.GetSource(sourceId);
+        }
+
+        [HttpGet]
+        [Route("GetContent")]
+        public async Task<IActionResult> GetContent(string sourceId, string directoryPath)
+        {
+            return Ok(); // Todo
+        }
+
+        [HttpGet]
+        [Route("GetSourceRoot")]
+        public async Task<IActionResult> GetSourceRoot(string sourceId)
+        {
+            return Ok(); // Todo
         }
 
         [HttpGet]
