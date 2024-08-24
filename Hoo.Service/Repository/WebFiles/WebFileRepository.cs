@@ -7,9 +7,9 @@ namespace Hoo.Service.Repository.WebFiles
     public class WebFileRepository : IWebFileRepository
     {
         private readonly ILogger<WebFileRepository> _logger;
-        private readonly WebFileDbContext _context;
+        private readonly HooDbContext _context;
 
-        public WebFileRepository(ILogger<WebFileRepository> logger, WebFileDbContext context)
+        public WebFileRepository(ILogger<WebFileRepository> logger, HooDbContext context)
         {
             _logger = logger;
             _context = context;
@@ -17,12 +17,12 @@ namespace Hoo.Service.Repository.WebFiles
 
         public async Task<IEnumerable<WebFileItem>> GetFilesAsync()
         {
-            return _context.Files.ToArray();
+            return _context.WebFiles.ToArray();
         }
 
-        public async Task<bool> AddWebFileAsync(Uri fileUri)
+        public async Task<bool> AddFileAsync(Uri fileUri)
         {
-            _context.Files.Add(new WebFileItem
+            _context.WebFiles.Add(new WebFileItem
             {
                 Id = Guid.NewGuid(),
                 AccessUri = fileUri,
@@ -31,6 +31,7 @@ namespace Hoo.Service.Repository.WebFiles
             });
 
             var saveResult = await _context.SaveChangesAsync();
+
             return !(saveResult == 1);
         }
     }

@@ -4,21 +4,23 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Azure.Core;
+using Hoo.Service.Controllers;
+using Hoo.Service.Repository.GoogleDrive;
 
-namespace HooService.Repository.GoogleDrive
+namespace Hoo.Service.Services.GoogleDrive
 {
-    public class GoogleDriveSource : IGoogleDriveSource
+    public class GoogleDriveService : IGoogleDriveService
     {
         private DriveService _driveService { get; }
 
-        public GoogleDriveSource(IConfiguration configuration)
+        private readonly ILogger<SourceController> _logger;
+        private readonly IGoogleDriveRepository _googleDriveRepository;
+
+        public GoogleDriveService(IConfiguration configuration, ILogger<SourceController> logger, IGoogleDriveRepository googleDriveRepository)
         {
+            _logger = logger;
+            _googleDriveRepository = googleDriveRepository;
+
             _driveService = InitializeDriveService(configuration);
         }
 
@@ -54,7 +56,7 @@ namespace HooService.Repository.GoogleDrive
             });
         }
 
-        public IEnumerable<Google.Apis.Drive.v3.Data.File> GetFiles(string folder)
+        private IEnumerable<Google.Apis.Drive.v3.Data.File> GetFiles(string folder)
         {
             var fileList = _driveService.Files.List();
             fileList.Q = $"mimeType!='application/vnd.google-apps.folder' and '{folder}' in parents";
@@ -72,6 +74,14 @@ namespace HooService.Repository.GoogleDrive
             } while (pageToken != null);
 
             return result;
+        }
+
+        public async Task SyncRemote()
+        {
+            foreach (var file in GetFiles("root"))
+            {
+                
+            }
         }
     }
 }

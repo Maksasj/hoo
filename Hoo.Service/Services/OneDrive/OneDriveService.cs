@@ -1,13 +1,14 @@
-﻿using Microsoft.Graph;
+﻿using Hoo.Service.Authetication;
+using Microsoft.Graph;
 
-namespace HooService.Repository.OneDrive
+namespace Hoo.Service.Services.OneDrive
 {
-    public class OneDriveSource : IOneDriveSource
+    public class OneDriveService : IOneDriveService
     {
         private readonly GraphServiceClient _graphClientClient;
         private readonly string _driveId;
 
-        public OneDriveSource(IConfiguration configuration)
+        public OneDriveService(IConfiguration configuration)
         {
             _graphClientClient = new GraphServiceClient(new SimpleAuthProvider(configuration.GetValue<string>("BearerToken")));
             _driveId = configuration.GetValue<string>("DriveId");

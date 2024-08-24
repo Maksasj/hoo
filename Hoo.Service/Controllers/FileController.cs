@@ -1,35 +1,21 @@
-using Hoo.Service.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Hoo.Service.Services.GoogleDrive;
+using Hoo.Service.Services.OneDrive;
+using Hoo.Service.Services.WebFiles;
 using HooService.Common;
+using Microsoft.AspNetCore.Mvc;
 
-namespace HooService.Controllers
+namespace Hoo.Service.Controllers
 {
     [ApiController]
     public class FileController : ControllerBase
     {
+        private readonly IFileProviderService _fileProviderService;
         private readonly ILogger<FileController> _logger;
-        private readonly IFileProvider _fileProvider;
 
-        public FileController(ILogger<FileController> logger, IFileProvider fileProvider)
+        public FileController(ILogger<FileController> logger, IFileProviderService fileProviderService)
         {
             _logger = logger;
-            _fileProvider = fileProvider;
-        }
-
-        [HttpGet]
-        [Route("GetFiles")]
-        public async Task<WebFileItem[]> GetFiles()
-        {
-            return await _fileProvider.GetFiles();
-        }
-
-        [HttpPost]
-        [Route("AddWebFile")]
-        public async Task<IActionResult> AddWebFile(Uri fileUri)
-        {
-            await _fileProvider.AddWebFile(fileUri);
-
-            return Ok();
+            _fileProviderService = fileProviderService;
         }
     }
 }

@@ -1,9 +1,11 @@
 using Hoo.Service.Data;
+using Hoo.Service.Repository.GoogleDrive;
+using Hoo.Service.Repository.OneDrive;
 using Hoo.Service.Repository.WebFiles;
-using HooService;
+using Hoo.Service.Services.GoogleDrive;
+using Hoo.Service.Services.OneDrive;
+using Hoo.Service.Services.WebFiles;
 using HooService.Common;
-using HooService.Repository.GoogleDrive;
-using HooService.Repository.OneDrive;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,15 +16,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<WebFileDbContext>(options =>
+builder.Services.AddDbContext<HooDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddTransient<IGoogleDriveSource, GoogleDriveSource>();
-builder.Services.AddTransient<IOneDriveSource, OneDriveSource>();
-
 builder.Services.AddTransient<IWebFileRepository, WebFileRepository>();
+builder.Services.AddTransient<IGoogleDriveRepository, GoogleDriveRepository>();
+builder.Services.AddTransient<IOneDriveFileRepository, OneDriveFileRepository>();
 
-builder.Services.AddTransient<IFileProvider, HooFileProvider>();
+builder.Services.AddTransient<IGoogleDriveService, GoogleDriveService>();
+builder.Services.AddTransient<IOneDriveService, OneDriveService>();
+builder.Services.AddTransient<IWebFileService, WebFileService>();
+
+builder.Services.AddTransient<IFileProviderService, HooFileProviderService>();
 
 var app = builder.Build();
 

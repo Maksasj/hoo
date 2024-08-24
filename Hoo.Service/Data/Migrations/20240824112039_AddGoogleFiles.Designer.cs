@@ -3,6 +3,7 @@ using System;
 using Hoo.Service.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,21 +11,18 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hoo.Service.Migrations
 {
     [DbContext(typeof(HooDbContext))]
-    partial class WebFileDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240824112039_AddGoogleFiles")]
+    partial class AddGoogleFiles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
             modelBuilder.Entity("Hoo.Service.Models.GoogleFileItem", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("GoogleId")
-                        .IsRequired()
+                    b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")

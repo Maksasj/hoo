@@ -1,9 +1,9 @@
 ﻿using Hoo.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Hoo.Service.Repository.WebFiles
+namespace Hoo.Service.Services.WebFiles
 {
-    public interface IWebFileRepository
+    public interface IWebFileService
     {
         Task<bool> AddFileAsync(Uri fileUri);
 

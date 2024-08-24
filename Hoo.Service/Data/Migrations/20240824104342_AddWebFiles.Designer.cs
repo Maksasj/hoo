@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Hoo.Service.Migrations
 {
-    [DbContext(typeof(WebFileDbContext))]
+    [DbContext(typeof(HooDbContext))]
     [Migration("20240824104342_AddWebFiles")]
     partial class AddWebFiles
     {
