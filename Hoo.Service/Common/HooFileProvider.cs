@@ -1,7 +1,9 @@
-﻿using Hoo.Service.Repository;
+﻿using Hoo.Service.Models;
+using Hoo.Service.Repository.WebFiles;
 using HooService.Repository.GoogleDrive;
 using HooService.Repository.OneDrive;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace HooService.Common
 {
@@ -13,17 +15,27 @@ namespace HooService.Common
 
         private readonly IWebFileRepository _webFileRepository;
 
-        public HooFileProvider(ILogger<HooFileProvider> logger, IGoogleDriveSource googleDriveProvider, IOneDriveSource oneDriveProvider)
+        public HooFileProvider(ILogger<HooFileProvider> logger, IGoogleDriveSource googleDriveProvider, IOneDriveSource oneDriveProvider, IWebFileRepository webFileRepository)
         {
             _logger = logger;
 
             _googleDriveProvider = googleDriveProvider;
             _oneDriveProvider = oneDriveProvider;
+            _webFileRepository = webFileRepository;
+        }
+
+        public async Task<WebFileItem[]> GetFiles()
+        {
+            var result = new List<WebFileItem>();
+
+            result.AddRange(await _webFileRepository.GetFilesAsync());
+
+            return result.ToArray();
         }
 
         public async Task<IActionResult> AddWebFile(Uri fileUri)
         {
-            await _webFileRepository.AddWebFile(fileUri);
+            await _webFileRepository.AddWebFileAsync(fileUri);
 
             return new OkResult();
         }

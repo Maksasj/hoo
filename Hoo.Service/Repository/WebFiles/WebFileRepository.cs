@@ -2,7 +2,7 @@
 using Hoo.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Hoo.Service.Repository
+namespace Hoo.Service.Repository.WebFiles
 {
     public class WebFileRepository : IWebFileRepository
     {
@@ -15,7 +15,12 @@ namespace Hoo.Service.Repository
             _context = context;
         }
 
-        public async Task<bool> AddWebFile(Uri fileUri)
+        public async Task<IEnumerable<WebFileItem>> GetFilesAsync()
+        {
+            return _context.Files.ToArray();
+        }
+
+        public async Task<bool> AddWebFileAsync(Uri fileUri)
         {
             _context.Files.Add(new WebFileItem
             {

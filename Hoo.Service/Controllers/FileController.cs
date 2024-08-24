@@ -1,3 +1,4 @@
+using Hoo.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 using HooService.Common;
 
@@ -15,41 +16,20 @@ namespace HooService.Controllers
             _fileProvider = fileProvider;
         }
 
+        [HttpGet]
+        [Route("GetFiles")]
+        public async Task<WebFileItem[]> GetFiles()
+        {
+            return await _fileProvider.GetFiles();
+        }
+
         [HttpPost]
         [Route("AddWebFile")]
-        public async Task<IActionResult> UploadFile(Uri fileUri)
+        public async Task<IActionResult> AddWebFile(Uri fileUri)
         {
-            return Ok();
-        }
-
-        /*
-        [HttpPost]
-        [Route("UploadFile")]
-        public async Task<IActionResult> UploadFile(string fileSourceId, string fileAccessString, IFormFile file)
-        {
-            using (var stream = new FileStream(fileAccessString, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
+            await _fileProvider.AddWebFile(fileUri);
 
             return Ok();
         }
-
-        [HttpDelete]
-        [Route("DeleteFile")]
-        public async Task<IActionResult> DeleteFile(string fileSourceId, string fileAccessString)
-        {
-            return Ok();
-        }
-
-        [HttpGet]
-        [Route("DownloadFile")]
-        public async Task<IActionResult> DownloadFile(string fileSourceId, string fileAccessString)
-        {
-            var content = new FileStream("C:\\Programming\\hoo\\README.md", FileMode.Open, FileAccess.Read, FileShare.Read);
-            var response = File(content, "application/octet-stream");
-            return response;
-        }
-        */
     }
 }

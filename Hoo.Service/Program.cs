@@ -1,4 +1,5 @@
 using Hoo.Service.Data;
+using Hoo.Service.Repository.WebFiles;
 using HooService;
 using HooService.Common;
 using HooService.Repository.GoogleDrive;
@@ -18,6 +19,8 @@ builder.Services.AddDbContext<WebFileDbContext>(options =>
 
 builder.Services.AddTransient<IGoogleDriveSource, GoogleDriveSource>();
 builder.Services.AddTransient<IOneDriveSource, OneDriveSource>();
+
+builder.Services.AddTransient<IWebFileRepository, WebFileRepository>();
 
 builder.Services.AddTransient<IFileProvider, HooFileProvider>();
 
