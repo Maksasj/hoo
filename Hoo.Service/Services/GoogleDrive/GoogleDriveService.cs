@@ -9,6 +9,7 @@ using Hoo.Service.Repository.GoogleDrive;
 using Hoo.Service.Models;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Hoo.Service.Services.GoogleDrive
 {
@@ -32,7 +33,7 @@ namespace Hoo.Service.Services.GoogleDrive
             return await _googleDriveRepository.GetFilesAsync();
         }
 
-        public async Task SyncRemote()
+        public async Task SyncRemoteAsync()
         {
             foreach (var file in GetGoogleFiles("root"))
             {
@@ -45,6 +46,13 @@ namespace Hoo.Service.Services.GoogleDrive
             }
 
             // throw new NotImplementedException();
+        }
+
+        public async Task<IActionResult> ClearCacheAsync()
+        {
+            await _googleDriveRepository.DeleteAllFilesAsync();
+
+            return new OkResult();
         }
 
         private DriveService InitializeDriveService(IConfiguration configuration)

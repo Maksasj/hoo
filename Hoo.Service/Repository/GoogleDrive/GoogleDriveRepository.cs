@@ -28,5 +28,14 @@ namespace Hoo.Service.Repository.GoogleDrive
         {
             return _context.GoogleDriveFiles.ToArray();
         }
+
+        public async Task<bool> DeleteAllFilesAsync()
+        {
+            _context.GoogleDriveFiles.RemoveRange(_context.GoogleDriveFiles);
+
+            var saveResult = await _context.SaveChangesAsync();
+
+            return !(saveResult == 1);
+        }
     }
 }

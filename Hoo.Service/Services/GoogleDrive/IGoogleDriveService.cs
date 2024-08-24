@@ -1,4 +1,5 @@
 ﻿using Hoo.Service.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Hoo.Service.Services.GoogleDrive
 {
@@ -6,6 +7,8 @@ namespace Hoo.Service.Services.GoogleDrive
     {
         Task<IEnumerable<GoogleFileItem>> GetFilesAsync();
 
-        Task SyncRemote();
+        Task SyncRemoteAsync();
+
+        Task<IActionResult> ClearCacheAsync();
     }
 }

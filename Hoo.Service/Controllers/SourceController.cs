@@ -32,8 +32,17 @@ namespace Hoo.Service.Controllers
         [Route("SyncSources")]
         public async Task<IActionResult> SyncSources()
         {
-            await _googleDriveService.SyncRemote();
+            await _googleDriveService.SyncRemoteAsync();
             // await _webFileService.SyncRemote();
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("ClearCache")]
+        public async Task<IActionResult> ClearCache()
+        {
+            await _googleDriveService.ClearCacheAsync();
 
             return Ok();
         }
