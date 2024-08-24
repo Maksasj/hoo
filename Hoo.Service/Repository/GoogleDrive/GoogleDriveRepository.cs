@@ -15,7 +15,7 @@ namespace Hoo.Service.Repository.GoogleDrive
             _context = context;
         }
 
-        public async Task<bool> AddFileAsync(GoogleFileItem item)
+        public async Task<bool> AddFileAsync(GoogleDriveFileItem item)
         {
             _context.GoogleDriveFiles.Add(item);
 
@@ -24,7 +24,7 @@ namespace Hoo.Service.Repository.GoogleDrive
             return !(saveResult == 1);
         }
 
-        public async Task<IEnumerable<GoogleFileItem>> GetFilesAsync()
+        public async Task<IEnumerable<GoogleDriveFileItem>> GetFilesAsync()
         {
             return _context.GoogleDriveFiles.ToArray();
         }

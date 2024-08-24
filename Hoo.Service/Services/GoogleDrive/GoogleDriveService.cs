@@ -28,24 +28,22 @@ namespace Hoo.Service.Services.GoogleDrive
             _driveService = InitializeDriveService(configuration);
         }
 
-        public async Task<IEnumerable<GoogleFileItem>> GetFilesAsync()
+        public async Task<IEnumerable<GoogleDriveFileItem>> GetFilesAsync()
         {
             return await _googleDriveRepository.GetFilesAsync();
         }
 
         public async Task SyncRemoteAsync()
         {
-            foreach (var file in GetGoogleFiles("root"))
+            foreach (var file in GetGoogleFiles())
             {
-                _googleDriveRepository.AddFileAsync(new GoogleFileItem
+                _googleDriveRepository.AddFileAsync(new GoogleDriveFileItem
                 {
                     Id = Guid.NewGuid(),
                     GoogleId = file.Id,
                     Name = file.Name
                 });
             }
-
-            // throw new NotImplementedException();
         }
 
         public async Task<IActionResult> ClearCacheAsync()
@@ -87,10 +85,10 @@ namespace Hoo.Service.Services.GoogleDrive
             });
         }
 
-        private IEnumerable<Google.Apis.Drive.v3.Data.File> GetGoogleFiles(string folder)
+        private IEnumerable<Google.Apis.Drive.v3.Data.File> GetGoogleFiles()
         {
             var fileList = _driveService.Files.List();
-            fileList.Q = $"mimeType!='application/vnd.google-apps.folder' and '{folder}' in parents";
+            fileList.Q = $"mimeType!='application/vnd.google-apps.folder'";
             fileList.Fields = "nextPageToken, files(id, name, size, mimeType)";
 
             var result = new List<Google.Apis.Drive.v3.Data.File>();
@@ -98,10 +96,13 @@ namespace Hoo.Service.Services.GoogleDrive
             do
             {
                 fileList.PageToken = pageToken;
+                
                 var filesResult = fileList.Execute();
                 var files = filesResult.Files;
+
                 pageToken = filesResult.NextPageToken;
                 result.AddRange(files);
+                _logger.LogInformation(files.Count.ToString());
             } while (pageToken != null);
 
             return result;

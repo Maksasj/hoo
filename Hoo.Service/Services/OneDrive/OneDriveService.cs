@@ -5,6 +5,7 @@ using Hoo.Service.Repository.WebFiles;
 using Hoo.Service.Services.WebFiles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Graph;
+using Microsoft.Graph.Drives.Item.Items.Item.GetActivitiesByIntervalWithStartDateTimeWithEndDateTimeWithInterval;
 
 namespace Hoo.Service.Services.OneDrive
 {
@@ -32,18 +33,43 @@ namespace Hoo.Service.Services.OneDrive
 
         public async Task SyncRemoteAsync()
         {
-            var result = await _graphClientClient.Drives[_driveId].Items["root"].Children.GetAsync();
+            var visited = new HashSet<string>();
 
-            foreach (var item in result.Value)
+            var directoryQueue = new Queue<string>();
+            directoryQueue.Enqueue("root");
+
+            while (directoryQueue.Count > 0)
             {
-                if (item.File != null)
+                var itemId = directoryQueue.Dequeue();
+                visited.Add(itemId);
+
+                var result = await _graphClientClient.Drives[_driveId].Items[itemId].Delta.GetAsDeltaGetResponseAsync();
+
+                while (result.OdataNextLink != null)
                 {
-                    _oneDriveFileRepository.AddFileAsync(new OneDriveFileItem
+                    foreach (var item in result.Value)
                     {
-                        Id = Guid.NewGuid(),
-                        OneDriveId = item.Id,
-                        Name = item.Name
-                    });
+                        if (item.File != null)
+                        {
+                            _oneDriveFileRepository.AddFileAsync(new OneDriveFileItem
+                            {
+                                Id = Guid.NewGuid(),
+                                OneDriveId = item.Id,
+                                Name = item.Name
+                            });
+                        }
+                        else
+                        {
+
+                            if (!visited.Contains(item.Id))
+                            {
+                                _logger.LogInformation(item.Name);
+                                directoryQueue.Enqueue(item.Id);
+                            }
+                        }
+                    }
+
+                    result = await new Microsoft.Graph.Drives.Item.Items.Item.Delta.DeltaRequestBuilder(result.OdataNextLink, _graphClientClient.RequestAdapter).GetAsync();
                 }
             }
         }

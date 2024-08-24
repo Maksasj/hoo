@@ -39,7 +39,7 @@ namespace HooService.Common
             {
                 result.Add(new FileItemModel
                 {
-                    Id = file.Id.ToString(),
+                    Id = file.Id,
                     Name = file.AccessUri.ToString()
                 });
             }
@@ -49,7 +49,7 @@ namespace HooService.Common
             {
                 result.Add(new FileItemModel
                 {
-                    Id = file.Id.ToString(),
+                    Id = file.Id,
                     Name = file.Name
                 });
             }
@@ -59,7 +59,7 @@ namespace HooService.Common
             {
                 result.Add(new FileItemModel
                 {
-                    Id = file.Id.ToString(),
+                    Id = file.Id,
                     Name = file.Name
                 });
             }

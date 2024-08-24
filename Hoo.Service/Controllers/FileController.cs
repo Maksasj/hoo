@@ -10,8 +10,8 @@ namespace Hoo.Service.Controllers
     [ApiController]
     public class FileController : ControllerBase
     {
-        private readonly IFileProviderService _fileProviderService;
         private readonly ILogger<FileController> _logger;
+        private readonly IFileProviderService _fileProviderService;
 
         public FileController(ILogger<FileController> logger, IFileProviderService fileProviderService)
         {
@@ -24,6 +24,13 @@ namespace Hoo.Service.Controllers
         public async Task<FileItemModel[]> GetFiles()
         {
             return (await _fileProviderService.GetFilesAsync()).ToArray();
+        }
+
+        [HttpGet]
+        [Route("GetFileCount")]
+        public async Task<long> GetFileCount()
+        {
+            return (await _fileProviderService.GetFilesAsync()).LongCount();
         }
     }
 }

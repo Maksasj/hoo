@@ -4,9 +4,9 @@ namespace Hoo.Service.Repository.GoogleDrive
 {
     public interface IGoogleDriveRepository
     {
-        Task<bool> AddFileAsync(GoogleFileItem item);
+        Task<bool> AddFileAsync(GoogleDriveFileItem item);
 
-        Task<IEnumerable<GoogleFileItem>> GetFilesAsync();
+        Task<IEnumerable<GoogleDriveFileItem>> GetFilesAsync();
 
         Task<bool> DeleteAllFilesAsync();
     }

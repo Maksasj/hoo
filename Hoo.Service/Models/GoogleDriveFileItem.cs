@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Hoo.Service.Models
 {
     [PrimaryKey(nameof(Id))]
-    public class GoogleFileItem
+    public class GoogleDriveFileItem
     {
         [Required]
         public Guid Id { get; set; }

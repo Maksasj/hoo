@@ -7,7 +7,7 @@ namespace Hoo.Service.Data
     {
         public DbSet<WebFileItem> WebFiles { get; set; }
         
-        public DbSet<GoogleFileItem> GoogleDriveFiles { get; set; }
+        public DbSet<GoogleDriveFileItem> GoogleDriveFiles { get; set; }
 
         public DbSet<OneDriveFileItem> OneDriveFiles { get; set; }
 

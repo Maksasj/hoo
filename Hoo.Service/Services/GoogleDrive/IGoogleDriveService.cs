@@ -5,7 +5,7 @@ namespace Hoo.Service.Services.GoogleDrive
 {
     public interface IGoogleDriveService
     {
-        Task<IEnumerable<GoogleFileItem>> GetFilesAsync();
+        Task<IEnumerable<GoogleDriveFileItem>> GetFilesAsync();
 
         Task SyncRemoteAsync();
 
