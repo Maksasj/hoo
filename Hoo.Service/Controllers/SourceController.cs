@@ -33,6 +33,7 @@ namespace Hoo.Service.Controllers
         public async Task<IActionResult> SyncSources()
         {
             await _googleDriveService.SyncRemote();
+            // await _webFileService.SyncRemote();
 
             return Ok();
         }

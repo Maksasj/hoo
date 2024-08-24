@@ -30,13 +30,29 @@ namespace HooService.Common
             _webFileService = webFileService;
         }
 
-        public async Task<IEnumerable<FileItem>> GetFiles()
+        public async Task<IEnumerable<FileItemModel>> GetFilesAsync()
         {
-            var result = new List<FileItem>();
+            var result = new List<FileItemModel>();
 
-            /*
-            result.AddRange(await _webFileRepository.GetFilesAsync());
-            */
+            // Web files
+            foreach (var file in await _webFileService.GetFilesAsync())
+            {
+                result.Add(new FileItemModel
+                {
+                    Id = file.Id.ToString(),
+                    Name = file.AccessUri.ToString()
+                });
+            }
+
+            // Google Drive files
+            foreach (var file in await _googleDriveService.GetFilesAsync())
+            {
+                result.Add(new FileItemModel
+                {
+                    Id = file.Id.ToString(),
+                    Name = file.Name
+                });
+            }
 
             return result;
         }

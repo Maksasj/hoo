@@ -24,7 +24,17 @@ namespace Hoo.Service.Services.WebFiles
 
         public async Task<bool> AddFileAsync(Uri fileUri)
         {
-            return await _webFileRepository.AddFileAsync(fileUri);
+            return await _webFileRepository.AddFileAsync(new WebFileItem {
+                Id = Guid.NewGuid(),
+                AccessUri = fileUri,
+                CreatedDate = DateTimeOffset.Now,
+                LastModificationDate = DateTimeOffset.Now
+            });
+        }
+
+        public async Task SyncRemote()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -8,5 +8,7 @@ namespace Hoo.Service.Services.WebFiles
         Task<bool> AddFileAsync(Uri fileUri);
 
         Task<IEnumerable<WebFileItem>> GetFilesAsync();
+
+        Task SyncRemote();
     }
 }

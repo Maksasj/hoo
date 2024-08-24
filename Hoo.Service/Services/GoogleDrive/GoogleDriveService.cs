@@ -6,6 +6,9 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Hoo.Service.Controllers;
 using Hoo.Service.Repository.GoogleDrive;
+using Hoo.Service.Models;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Hoo.Service.Services.GoogleDrive
 {
@@ -22,6 +25,26 @@ namespace Hoo.Service.Services.GoogleDrive
             _googleDriveRepository = googleDriveRepository;
 
             _driveService = InitializeDriveService(configuration);
+        }
+
+        public async Task<IEnumerable<GoogleFileItem>> GetFilesAsync()
+        {
+            return await _googleDriveRepository.GetFilesAsync();
+        }
+
+        public async Task SyncRemote()
+        {
+            foreach (var file in GetGoogleFiles("root"))
+            {
+                _googleDriveRepository.AddFileAsync(new GoogleFileItem
+                {
+                    Id = Guid.NewGuid(),
+                    GoogleId = file.Id,
+                    Name = file.Name
+                });
+            }
+
+            // throw new NotImplementedException();
         }
 
         private DriveService InitializeDriveService(IConfiguration configuration)
@@ -56,7 +79,7 @@ namespace Hoo.Service.Services.GoogleDrive
             });
         }
 
-        private IEnumerable<Google.Apis.Drive.v3.Data.File> GetFiles(string folder)
+        private IEnumerable<Google.Apis.Drive.v3.Data.File> GetGoogleFiles(string folder)
         {
             var fileList = _driveService.Files.List();
             fileList.Q = $"mimeType!='application/vnd.google-apps.folder' and '{folder}' in parents";
@@ -74,14 +97,6 @@ namespace Hoo.Service.Services.GoogleDrive
             } while (pageToken != null);
 
             return result;
-        }
-
-        public async Task SyncRemote()
-        {
-            foreach (var file in GetFiles("root"))
-            {
-                
-            }
         }
     }
 }

@@ -20,16 +20,10 @@ namespace Hoo.Service.Repository.WebFiles
             return _context.WebFiles.ToArray();
         }
 
-        public async Task<bool> AddFileAsync(Uri fileUri)
+        public async Task<bool> AddFileAsync(WebFileItem item)
         {
-            _context.WebFiles.Add(new WebFileItem
-            {
-                Id = Guid.NewGuid(),
-                AccessUri = fileUri,
-                CreatedDate = DateTimeOffset.Now,
-                LastModificationDate = DateTimeOffset.Now
-            });
-
+            _context.WebFiles.Add(item);
+            
             var saveResult = await _context.SaveChangesAsync();
 
             return !(saveResult == 1);

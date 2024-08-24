@@ -1,4 +1,5 @@
-﻿using Hoo.Service.Services.GoogleDrive;
+﻿using Hoo.Service.Models;
+using Hoo.Service.Services.GoogleDrive;
 using Hoo.Service.Services.OneDrive;
 using Hoo.Service.Services.WebFiles;
 using HooService.Common;
@@ -16,6 +17,13 @@ namespace Hoo.Service.Controllers
         {
             _logger = logger;
             _fileProviderService = fileProviderService;
+        }
+
+        [HttpGet]
+        [Route("GetFiles")]
+        public async Task<FileItemModel[]> GetFiles()
+        {
+            return (await _fileProviderService.GetFilesAsync()).ToArray();
         }
     }
 }

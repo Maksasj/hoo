@@ -2,7 +2,7 @@
 
 namespace Hoo.Service.Models
 {
-    public class FileItem
+    public class FileItemModel
     {
         public string Id { get; set; }
 

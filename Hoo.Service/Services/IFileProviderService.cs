@@ -5,7 +5,7 @@ namespace HooService.Common
 {
     public interface IFileProviderService
     {
-        Task<IEnumerable<FileItem>> GetFiles();
+        Task<IEnumerable<FileItemModel>> GetFilesAsync();
 
         /*
         Task<IActionResult> GetFile(string sourceId, string filePath);
