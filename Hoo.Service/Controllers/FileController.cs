@@ -16,6 +16,14 @@ namespace HooService.Controllers
         }
 
         [HttpPost]
+        [Route("AddWebFile")]
+        public async Task<IActionResult> UploadFile(Uri fileUri)
+        {
+            return Ok();
+        }
+
+        /*
+        [HttpPost]
         [Route("UploadFile")]
         public async Task<IActionResult> UploadFile(string fileSourceId, string fileAccessString, IFormFile file)
         {
@@ -42,5 +50,6 @@ namespace HooService.Controllers
             var response = File(content, "application/octet-stream");
             return response;
         }
+        */
     }
 }

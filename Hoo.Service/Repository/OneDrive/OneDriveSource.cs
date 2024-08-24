@@ -1,11 +1,4 @@
-﻿using Azure.Identity;
-using Google.Apis.Auth.OAuth2;
-using HooService.Repository.GoogleDrive;
-using HooService.Repository.OneDrive;
-using Microsoft.AspNetCore.Components.Server;
-using Microsoft.Graph;
-using Microsoft.Kiota.Abstractions;
-using Microsoft.Kiota.Abstractions.Authentication;
+﻿using Microsoft.Graph;
 
 namespace HooService.Repository.OneDrive
 {
