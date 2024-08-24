@@ -41,10 +41,11 @@ namespace Hoo.Service.Services.OneDrive
             while (directoryQueue.Count > 0)
             {
                 var itemId = directoryQueue.Dequeue();
-                visited.Add(itemId);
+
 
                 var result = await _graphClientClient.Drives[_driveId].Items[itemId].Delta.GetAsDeltaGetResponseAsync();
 
+                // We go by each page
                 while (result.OdataNextLink != null)
                 {
                     foreach (var item in result.Value)
@@ -58,18 +59,17 @@ namespace Hoo.Service.Services.OneDrive
                                 Name = item.Name
                             });
                         }
-                        else
+                        
+                        if (item.Folder != null && !visited.Contains(item.Id)) 
                         {
+                            visited.Add(item.Id);
+                            directoryQueue.Enqueue(item.Id);
+                            _logger.LogInformation("Adding '" + item.Name + "' to queue");
 
-                            if (!visited.Contains(item.Id))
-                            {
-                                _logger.LogInformation(item.Name);
-                                directoryQueue.Enqueue(item.Id);
-                            }
                         }
                     }
 
-                    result = await new Microsoft.Graph.Drives.Item.Items.Item.Delta.DeltaRequestBuilder(result.OdataNextLink, _graphClientClient.RequestAdapter).GetAsync();
+                    result = await new Microsoft.Graph.Drives.Item.Items.Item.Delta.DeltaRequestBuilder(result.OdataNextLink, _graphClientClient.RequestAdapter).GetAsDeltaGetResponseAsync();
                 }
             }
         }

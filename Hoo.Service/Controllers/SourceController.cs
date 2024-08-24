@@ -32,8 +32,8 @@ namespace Hoo.Service.Controllers
         [Route("SyncSources")]
         public async Task<IActionResult> SyncSources()
         {
-            await _googleDriveService.SyncRemoteAsync();
-            // await _oneDriveService.SyncRemoteAsync();
+            // await _googleDriveService.SyncRemoteAsync();
+            await _oneDriveService.SyncRemoteAsync();
             // await _webFileService.SyncRemote();
 
             return Ok();
