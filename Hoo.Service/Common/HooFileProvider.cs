@@ -1,26 +1,16 @@
 ﻿using HooService.Repository.GoogleDrive;
 using HooService.Repository.OneDrive;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Graph;
-using Microsoft.Graph.Models;
-using Azure.Identity;
-using Azure.Core;
-using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
-using Microsoft.Graph.Reports.GetPrinterArchivedPrintJobsWithPrinterIdWithStartDateTimeWithEndDateTime;
-using HooService.Repository.GoogleDrive;
-using HooService.Repository.OneDrive;
 
 namespace HooService.Common
 {
     public class HooFileProvider : IFileProvider
     {
-        private readonly IGoogleDriveProvider _googleDriveProvider;
-        private readonly IOneDriveProvider _oneDriveProvider;
+        private readonly IGoogleDriveSource _googleDriveProvider;
+        private readonly IOneDriveSource _oneDriveProvider;
         private readonly ILogger<HooFileProvider> _logger;
 
-        public HooFileProvider(ILogger<HooFileProvider> logger, IGoogleDriveProvider googleDriveProvider, IOneDriveProvider oneDriveProvider)
+        public HooFileProvider(ILogger<HooFileProvider> logger, IGoogleDriveSource googleDriveProvider, IOneDriveSource oneDriveProvider)
         {
             _logger = logger;
 
@@ -30,6 +20,11 @@ namespace HooService.Common
 
         public async Task<IActionResult> GetFile(string fileSourceId, string filePath)
         {
+            foreach (var file in _googleDriveProvider.GetFiles("root"))
+            {
+                _logger.LogInformation(file.Id);
+            }
+
             return new OkResult();
         }
 

@@ -1,7 +1,9 @@
+using Hoo.Service.Data;
 using HooService;
 using HooService.Common;
 using HooService.Repository.GoogleDrive;
 using HooService.Repository.OneDrive;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +14,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddTransient<IGoogleDriveProvider, GoogleDriveProvider>();
-builder.Services.AddTransient<IOneDriveProvider, OneDriveProvider>();
+builder.Services.AddDbContext<HooDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddTransient<IGoogleDriveSource, GoogleDriveSource>();
+builder.Services.AddTransient<IOneDriveSource, OneDriveSource>();
 
 builder.Services.AddTransient<IFileProvider, HooFileProvider>();
 
@@ -27,6 +32,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
 
 app.UseAuthorization();
 
