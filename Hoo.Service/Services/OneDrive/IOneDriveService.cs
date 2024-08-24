@@ -1,7 +1,14 @@
-﻿namespace Hoo.Service.Services.OneDrive
+﻿using Hoo.Service.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Hoo.Service.Services.OneDrive
 {
     public interface IOneDriveService
     {
-        public void Do();
+        Task<IEnumerable<OneDriveFileItem>> GetFilesAsync();
+
+        Task SyncRemoteAsync();
+
+        Task<IActionResult> ClearCacheAsync();
     }
 }

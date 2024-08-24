@@ -33,6 +33,7 @@ namespace Hoo.Service.Controllers
         public async Task<IActionResult> SyncSources()
         {
             await _googleDriveService.SyncRemoteAsync();
+            await _oneDriveService.SyncRemoteAsync();
             // await _webFileService.SyncRemote();
 
             return Ok();
@@ -43,6 +44,7 @@ namespace Hoo.Service.Controllers
         public async Task<IActionResult> ClearCache()
         {
             await _googleDriveService.ClearCacheAsync();
+            await _oneDriveService.ClearCacheAsync();
 
             return Ok();
         }

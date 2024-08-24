@@ -3,6 +3,7 @@ using System;
 using Hoo.Service.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hoo.Service.Migrations
 {
     [DbContext(typeof(HooDbContext))]
-    partial class WebFileDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240824121724_AddOneDriveFiles")]
+    partial class AddOneDriveFiles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -42,11 +45,11 @@ namespace Hoo.Service.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("GoogleId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("OneDriveId")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

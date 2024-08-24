@@ -9,6 +9,8 @@ namespace Hoo.Service.Data
         
         public DbSet<GoogleFileItem> GoogleDriveFiles { get; set; }
 
+        public DbSet<OneDriveFileItem> OneDriveFiles { get; set; }
+
         public HooDbContext(DbContextOptions<HooDbContext> options) : base(options)
         {
         }

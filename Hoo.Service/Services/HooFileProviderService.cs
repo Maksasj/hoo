@@ -11,7 +11,7 @@ namespace HooService.Common
     public class HooFileProviderService : IFileProviderService
     {
         private readonly IGoogleDriveService _googleDriveService;
-        private readonly IOneDriveService _oneDriveProvider;
+        private readonly IOneDriveService _oneDriveService;
         private readonly IWebFileService _webFileService;
 
         private readonly ILogger<HooFileProviderService> _logger;
@@ -19,14 +19,14 @@ namespace HooService.Common
         public HooFileProviderService(
             ILogger<HooFileProviderService> logger, 
             IGoogleDriveService googleDriveService,
-            IOneDriveService oneDriveProvider,
+            IOneDriveService oneDriveService,
             IWebFileService webFileService
             )
         {
             _logger = logger;
 
             _googleDriveService = googleDriveService;
-            _oneDriveProvider = oneDriveProvider;
+            _oneDriveService = oneDriveService;
             _webFileService = webFileService;
         }
 
@@ -46,6 +46,16 @@ namespace HooService.Common
 
             // Google Drive files
             foreach (var file in await _googleDriveService.GetFilesAsync())
+            {
+                result.Add(new FileItemModel
+                {
+                    Id = file.Id.ToString(),
+                    Name = file.Name
+                });
+            }
+
+            // One Drive files
+            foreach (var file in await _oneDriveService.GetFilesAsync())
             {
                 result.Add(new FileItemModel
                 {
