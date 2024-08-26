@@ -13,6 +13,7 @@ namespace Hoo.Service.Data
 
         public HooDbContext(DbContextOptions<HooDbContext> options) : base(options)
         {
+
         }
     }
 }

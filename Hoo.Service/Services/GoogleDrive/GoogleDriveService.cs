@@ -39,6 +39,10 @@ namespace Hoo.Service.Services.GoogleDrive
         {
             foreach (var file in _driveClient.GetFiles())
             {
+                if (_googleDriveRepository.HasFile(file.Id))
+                    continue;
+
+                // Todo, we probably can bulk add files to database
                 await _googleDriveRepository.AddFileAsync(new GoogleDriveFileItem
                 {
                     Id = Guid.NewGuid(),

@@ -13,7 +13,6 @@ namespace Hoo.Service.Services.GoogleDrive.Client
 
         public IEnumerator<Google.Apis.Drive.v3.Data.File> GetEnumerator()
         {
-
             var fileList = _driveService.Files.List();
             fileList.Q = $"mimeType!='application/vnd.google-apps.folder'";
             fileList.Fields = "nextPageToken, files(id, name, size, mimeType)";
@@ -24,14 +23,11 @@ namespace Hoo.Service.Services.GoogleDrive.Client
                 fileList.PageToken = pageToken;
 
                 var filesResult = fileList.Execute();
-                var files = filesResult.Files;
-
                 pageToken = filesResult.NextPageToken;
 
-                foreach (var file in files)
-                {
+                foreach (var file in filesResult.Files)
                     yield return file;
-                }
+
             } while (pageToken != null);
         }
     }

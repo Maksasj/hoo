@@ -14,7 +14,6 @@ namespace Hoo.Service.Services.GoogleDrive.Client
         private readonly ILogger<SourceController> _logger;
         private DriveService _driveService { get; }
 
-
         public GoogleDriveClient(ILogger<SourceController> logger, IConfiguration configuration)
         {
             _logger = logger;

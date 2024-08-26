@@ -4,6 +4,7 @@ using Hoo.Service.Services.OneDrive;
 using Hoo.Service.Services.WebFiles;
 using HooService.Common;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Hoo.Service.Controllers
 {
@@ -21,9 +22,19 @@ namespace Hoo.Service.Controllers
 
         [HttpGet]
         [Route("GetFiles")]
-        public async Task<FileItemModel[]> GetFiles()
+        public async Task<FileItemPageResponseModel> GetFiles(int pageIndex = 0, int itemsPerPage = 100)
         {
-            return (await _fileProviderService.GetFilesAsync()).ToArray();
+            var files = (await _fileProviderService.GetFilesAsync())
+                .Skip(pageIndex * itemsPerPage)
+                .Take(itemsPerPage)
+                .ToArray();
+            
+            return new FileItemPageResponseModel
+            {
+                PageIndex = pageIndex,
+                ItemCount = files.Length,
+                Files = files,
+            };
         }
 
         [HttpGet]
