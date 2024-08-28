@@ -39,6 +39,9 @@ namespace Hoo.Service.Services.GoogleDrive
         {
             var file = await _googleDriveRepository.GetFileAsync(fileId);
 
+            if (file == null)
+                return null;
+
             return new FileThumbnailItem
             {
                 FileId = file.Id,

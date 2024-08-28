@@ -50,6 +50,9 @@ namespace Hoo.Service.Controllers
         {
             var item = await _fileProviderService.GetFileThumbnailAsync(fileId);
 
+            if (item == null)
+                return null;
+
             return new FileThumbnailResponseModel
             {
                 Id = item.FileId,

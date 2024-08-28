@@ -10,7 +10,6 @@ namespace Hoo.Service.Repository.GoogleDrive
 
         bool HasFile(string GoogleId);
 
-
         Task<IEnumerable<GoogleDriveFileItem>> GetFilesAsync();
 
         Task<bool> DeleteAllFilesAsync();

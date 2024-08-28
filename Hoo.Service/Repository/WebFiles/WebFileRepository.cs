@@ -15,6 +15,16 @@ namespace Hoo.Service.Repository.WebFiles
             _context = context;
         }
 
+        public async Task<WebFileItem> GetFileAsync(Guid fileId)
+        {
+            var query = _context.WebFiles.Where(file => file.Id.Equals(fileId));
+
+            if (!query.Any())
+                return null;
+
+            return query.First();
+        }
+
         public async Task<IEnumerable<WebFileItem>> GetFilesAsync()
         {
             return _context.WebFiles.ToArray();

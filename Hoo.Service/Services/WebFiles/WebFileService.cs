@@ -17,6 +17,17 @@ namespace Hoo.Service.Services.WebFiles
             _webFileRepository = webFileRepository;
         }
 
+        public async Task<FileThumbnailItem> GetFileThumbnailAsync(Guid fileId)
+        {
+            var file = await _webFileRepository.GetFileAsync(fileId);
+
+            return new FileThumbnailItem
+            {
+                FileId = file.Id,
+                ThumbnailUrl = file.AccessUri.ToString(),
+            };
+        }
+
         public async Task<IEnumerable<WebFileItem>> GetFilesAsync()
         {
             return await _webFileRepository.GetFilesAsync();
