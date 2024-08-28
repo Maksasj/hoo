@@ -14,5 +14,8 @@ namespace Hoo.Service.Models
 
         [Required]
         public string Name { get; set; }
+
+        [Required]
+        public string ThumbnailUri { get; set; }
     }
 }

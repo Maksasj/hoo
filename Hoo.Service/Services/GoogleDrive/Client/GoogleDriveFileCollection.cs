@@ -15,7 +15,7 @@ namespace Hoo.Service.Services.GoogleDrive.Client
         {
             var fileList = _driveService.Files.List();
             fileList.Q = $"mimeType!='application/vnd.google-apps.folder'";
-            fileList.Fields = "nextPageToken, files(id, name, size)";
+            fileList.Fields = @"nextPageToken, files(*)";
 
             string pageToken = null;
             do

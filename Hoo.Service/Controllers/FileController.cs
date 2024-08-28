@@ -43,5 +43,18 @@ namespace Hoo.Service.Controllers
         {
             return (await _fileProviderService.GetFilesAsync()).LongCount();
         }
+
+        [HttpGet]
+        [Route("GetFileThumbnail")]
+        public async Task<FileThumbnailResponseModel> GetFileThumbnail(Guid fileId)
+        {
+            var item = await _fileProviderService.GetFileThumbnailAsync(fileId);
+
+            return new FileThumbnailResponseModel
+            {
+                Id = item.FileId,
+                ThumbnailUrl = item.ThumbnailUrl
+            };
+        }
     }
 }

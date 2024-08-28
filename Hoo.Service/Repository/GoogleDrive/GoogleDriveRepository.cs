@@ -24,6 +24,11 @@ namespace Hoo.Service.Repository.GoogleDrive
             return !(saveResult == 1);
         }
 
+        public async Task<GoogleDriveFileItem> GetFileAsync(Guid fileId)
+        {
+            return _context.GoogleDriveFiles.Where(file => file.Id.Equals(fileId)).First();
+        }
+
         public bool HasFile(string GoogleId)
         {
             return _context.GoogleDriveFiles.Where(file => file.GoogleId.Equals(GoogleId)).Any();

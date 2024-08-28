@@ -17,7 +17,7 @@ namespace Hoo.Service.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("Hoo.Service.Models.GoogleFileItem", b =>
+            modelBuilder.Entity("Hoo.Service.Models.GoogleDriveFileItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -28,6 +28,10 @@ namespace Hoo.Service.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ThumbnailUri")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

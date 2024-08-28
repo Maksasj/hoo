@@ -66,5 +66,10 @@ namespace HooService.Common
 
             return result;
         }
+
+        public async Task<FileThumbnailItem> GetFileThumbnailAsync(Guid fileId)
+        {
+            return await _googleDriveService.GetFileThumbnailAsync(fileId);
+        }
     }
 }

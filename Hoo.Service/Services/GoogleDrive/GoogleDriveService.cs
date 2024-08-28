@@ -35,6 +35,18 @@ namespace Hoo.Service.Services.GoogleDrive
             return await _googleDriveRepository.GetFilesAsync();
         }
 
+        public async Task<FileThumbnailItem> GetFileThumbnailAsync(Guid fileId)
+        {
+            var file = await _googleDriveRepository.GetFileAsync(fileId);
+
+            return new FileThumbnailItem
+            {
+                FileId = file.Id,
+                ThumbnailUrl = file.ThumbnailUri
+            };
+        }
+
+
         public async Task SyncRemoteAsync()
         {
             foreach (var file in _driveClient.GetFiles())
@@ -47,7 +59,8 @@ namespace Hoo.Service.Services.GoogleDrive
                 {
                     Id = Guid.NewGuid(),
                     GoogleId = file.Id,
-                    Name = file.Name
+                    Name = file.Name,
+                    ThumbnailUri = file.ThumbnailLink != null ? file.ThumbnailLink : "empty"
                 });
             }
         }
