@@ -4,3 +4,4 @@ obj
 Hoo.Service.csproj.user
 Hoo.Service.http
 appsettings.Development.json
+hoo.db
