@@ -7,11 +7,15 @@ namespace Hoo.Service.Repository.GoogleDrive
         Task<bool> AddFileAsync(GoogleDriveFileItem item);
 
         Task<GoogleDriveFileItem> GetFileAsync(Guid fileId);
+        
+        Task<bool> DeleteFileAsync(Guid fileId);
 
-        bool HasFile(string GoogleId);
+        bool HasFile(Guid fileId);
+
+        bool HasGoogleFile(string GoogleId);
 
         Task<IEnumerable<GoogleDriveFileItem>> GetFilesAsync();
 
-        Task<bool> DeleteAllFilesAsync();
+        Task<bool> DeleteFilesAsync(IEnumerable<GoogleDriveFileItem> files);
     }
 }

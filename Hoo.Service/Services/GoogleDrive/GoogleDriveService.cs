@@ -35,26 +35,11 @@ namespace Hoo.Service.Services.GoogleDrive
             return await _googleDriveRepository.GetFilesAsync();
         }
 
-        public async Task<FileThumbnailItem> GetFileThumbnailAsync(Guid fileId)
-        {
-            var file = await _googleDriveRepository.GetFileAsync(fileId);
-
-            if (file == null)
-                return null;
-
-            return new FileThumbnailItem
-            {
-                FileId = file.Id,
-                ThumbnailUrl = file.ThumbnailUri
-            };
-        }
-
-
         public async Task SyncRemoteAsync()
         {
             foreach (var file in _driveClient.GetFiles())
             {
-                if (_googleDriveRepository.HasFile(file.Id))
+                if (_googleDriveRepository.HasGoogleFile(file.Id))
                     continue;
 
                 // Todo, we probably can bulk add files to database
@@ -70,7 +55,7 @@ namespace Hoo.Service.Services.GoogleDrive
 
         public async Task<IActionResult> ClearCacheAsync()
         {
-            await _googleDriveRepository.DeleteAllFilesAsync();
+            await _googleDriveRepository.DeleteFilesAsync(await _googleDriveRepository.GetFilesAsync());
 
             return new OkResult();
         }

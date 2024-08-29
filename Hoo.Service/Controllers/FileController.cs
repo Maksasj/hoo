@@ -1,4 +1,5 @@
 ﻿using Hoo.Service.Models;
+using Hoo.Service.Services;
 using Hoo.Service.Services.GoogleDrive;
 using Hoo.Service.Services.OneDrive;
 using Hoo.Service.Services.WebFiles;
@@ -12,12 +13,15 @@ namespace Hoo.Service.Controllers
     public class FileController : ControllerBase
     {
         private readonly ILogger<FileController> _logger;
-        private readonly IFileProviderService _fileProviderService;
 
-        public FileController(ILogger<FileController> logger, IFileProviderService fileProviderService)
+        private readonly IFileProviderService _fileProviderService;
+        private readonly IFileThumbnailProviderService _fileThumbnailProviderService;
+
+        public FileController(ILogger<FileController> logger, IFileProviderService fileProviderService, IFileThumbnailProviderService fileThumbnailProviderService)
         {
             _logger = logger;
             _fileProviderService = fileProviderService;
+            _fileThumbnailProviderService = fileThumbnailProviderService;
         }
 
         [HttpGet]
@@ -48,14 +52,14 @@ namespace Hoo.Service.Controllers
         [Route("GetFileThumbnail")]
         public async Task<FileThumbnailResponseModel> GetFileThumbnail(Guid fileId)
         {
-            var item = await _fileProviderService.GetFileThumbnailAsync(fileId);
+            var item = await _fileThumbnailProviderService.GetFileThumbnailAsync(fileId);
 
             if (item == null)
                 return null;
 
             return new FileThumbnailResponseModel
             {
-                Id = item.FileId,
+                FileId = item.FileId,
                 ThumbnailUrl = item.ThumbnailUrl
             };
         }

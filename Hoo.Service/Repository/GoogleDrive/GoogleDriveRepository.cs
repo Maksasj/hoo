@@ -6,12 +6,10 @@ namespace Hoo.Service.Repository.GoogleDrive
 {
     public class GoogleDriveRepository : IGoogleDriveRepository
     {
-        private readonly ILogger<GoogleDriveRepository> _logger;
         private readonly HooDbContext _context;
 
-        public GoogleDriveRepository(ILogger<GoogleDriveRepository> logger, HooDbContext context)
+        public GoogleDriveRepository(HooDbContext context)
         {
-            _logger = logger;
             _context = context;
         }
 
@@ -34,7 +32,28 @@ namespace Hoo.Service.Repository.GoogleDrive
             return query.First();
         }
 
-        public bool HasFile(string GoogleId)
+        public async Task<bool> DeleteFileAsync(Guid fileId)
+        {
+            var file = await GetFileAsync(fileId);
+
+            if (fileId == null)
+                return false;
+
+            _context.GoogleDriveFiles.RemoveRange(file);
+
+            var saveResult = await _context.SaveChangesAsync();
+
+            return !(saveResult == 1);
+        }
+
+        public bool HasFile(Guid fileId)
+        {
+            var query = _context.GoogleDriveFiles.Where(file => file.Id.Equals(fileId));
+
+            return query.Any();
+        }
+
+        public bool HasGoogleFile(string GoogleId)
         {
             var query = _context.GoogleDriveFiles.Where(file => file.GoogleId.Equals(GoogleId));
 
@@ -43,12 +62,12 @@ namespace Hoo.Service.Repository.GoogleDrive
 
         public async Task<IEnumerable<GoogleDriveFileItem>> GetFilesAsync()
         {
-            return _context.GoogleDriveFiles.ToArray();
+            return _context.GoogleDriveFiles;
         }
 
-        public async Task<bool> DeleteAllFilesAsync()
+        public async Task<bool> DeleteFilesAsync(IEnumerable<GoogleDriveFileItem> files)
         {
-            _context.GoogleDriveFiles.RemoveRange(_context.GoogleDriveFiles);
+            _context.GoogleDriveFiles.RemoveRange(files);
 
             var saveResult = await _context.SaveChangesAsync();
 

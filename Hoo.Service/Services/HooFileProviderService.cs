@@ -35,51 +35,28 @@ namespace HooService.Common
             var result = new List<FileItemModel>();
 
             // Web files
-            foreach (var file in await _webFileService.GetFilesAsync())
+            result.AddRange((await _webFileService.GetFilesAsync()).Select(file => new FileItemModel
             {
-                result.Add(new FileItemModel
-                {
-                    Id = file.Id,
-                    Name = file.AccessUri.ToString()
-                });
-            }
+                Id = file.Id,
+                Name = file.AccessUri.ToString()
+            }));
+
 
             // Google Drive files
-            foreach (var file in await _googleDriveService.GetFilesAsync())
+            result.AddRange((await _googleDriveService.GetFilesAsync()).Select(file => new FileItemModel
             {
-                result.Add(new FileItemModel
-                {
-                    Id = file.Id,
-                    Name = file.Name
-                });
-            }
-
+                Id = file.Id,
+                Name = file.Name
+            }));
 
             // One Drive files
-            foreach (var file in await _oneDriveService.GetFilesAsync())
+            result.AddRange((await _oneDriveService.GetFilesAsync()).Select(file => new FileItemModel
             {
-                result.Add(new FileItemModel
-                {
-                    Id = file.Id,
-                    Name = file.Name
-                });
-            }
+                Id = file.Id,
+                Name = file.Name
+            }));
 
             return result;
-        }
-
-        public async Task<FileThumbnailItem> GetFileThumbnailAsync(Guid fileId)
-        {
-            FileThumbnailItem thumbnail = null;
-
-            thumbnail = await _googleDriveService.GetFileThumbnailAsync(fileId);
-
-            if (thumbnail == null)
-            {
-                thumbnail = await _webFileService.GetFileThumbnailAsync(fileId);
-            }
-
-            return thumbnail;
         }
     }
 }

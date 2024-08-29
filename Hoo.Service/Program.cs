@@ -2,6 +2,7 @@ using Hoo.Service.Data;
 using Hoo.Service.Repository.GoogleDrive;
 using Hoo.Service.Repository.OneDrive;
 using Hoo.Service.Repository.WebFiles;
+using Hoo.Service.Services;
 using Hoo.Service.Services.GoogleDrive;
 using Hoo.Service.Services.OneDrive;
 using Hoo.Service.Services.WebFiles;
@@ -31,13 +32,14 @@ builder.Services.AddDbContext<HooDbContext>(options =>
 
 builder.Services.AddTransient<IWebFileRepository, WebFileRepository>();
 builder.Services.AddTransient<IGoogleDriveRepository, GoogleDriveRepository>();
-builder.Services.AddTransient<IOneDriveFileRepository, OneDriveFileRepository>();
+builder.Services.AddTransient<IOneDriveRepository, OneDriveRepository>();
 
 builder.Services.AddTransient<IGoogleDriveService, GoogleDriveService>();
 builder.Services.AddTransient<IOneDriveService, OneDriveService>();
 builder.Services.AddTransient<IWebFileService, WebFileService>();
 
 builder.Services.AddTransient<IFileProviderService, HooFileProviderService>();
+builder.Services.AddTransient<IFileThumbnailProviderService, HooFileThumbnailProviderService>();
 
 var app = builder.Build();
 

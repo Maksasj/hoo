@@ -8,8 +8,6 @@ namespace HooService.Common
     {
         Task<IEnumerable<FileItemModel>> GetFilesAsync();
 
-        Task<FileThumbnailItem> GetFileThumbnailAsync(Guid fileId);
-
         /*
         Task<IActionResult> GetFile(string sourceId, string filePath);
 

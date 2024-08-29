@@ -6,13 +6,20 @@ namespace Hoo.Service.Repository.WebFiles
 {
     public class WebFileRepository : IWebFileRepository
     {
-        private readonly ILogger<WebFileRepository> _logger;
         private readonly HooDbContext _context;
 
-        public WebFileRepository(ILogger<WebFileRepository> logger, HooDbContext context)
+        public WebFileRepository(HooDbContext context)
         {
-            _logger = logger;
             _context = context;
+        }
+
+        public async Task<bool> AddFileAsync(WebFileItem item)
+        {
+            _context.WebFiles.Add(item);
+
+            var saveResult = await _context.SaveChangesAsync();
+
+            return !(saveResult == 1);
         }
 
         public async Task<WebFileItem> GetFileAsync(Guid fileId)
@@ -25,15 +32,36 @@ namespace Hoo.Service.Repository.WebFiles
             return query.First();
         }
 
-        public async Task<IEnumerable<WebFileItem>> GetFilesAsync()
+        public async Task<bool> DeleteFileAsync(Guid fileId)
         {
-            return _context.WebFiles.ToArray();
+            var file = await GetFileAsync(fileId);
+
+            if(fileId == null)
+                return false;
+
+            _context.WebFiles.RemoveRange(file);
+
+            var saveResult = await _context.SaveChangesAsync();
+
+            return !(saveResult == 1);
         }
 
-        public async Task<bool> AddFileAsync(WebFileItem item)
+        public bool HasFile(Guid fileId)
         {
-            _context.WebFiles.Add(item);
-            
+            var query = _context.WebFiles.Where(file => file.Id.Equals(fileId));
+
+            return query.Any();
+        }
+
+        public async Task<IEnumerable<WebFileItem>> GetFilesAsync()
+        {
+            return _context.WebFiles;
+        }
+
+        public async Task<bool> DeleteFilesAsync(IEnumerable<WebFileItem> files)
+        {
+            _context.WebFiles.RemoveRange(files);
+
             var saveResult = await _context.SaveChangesAsync();
 
             return !(saveResult == 1);

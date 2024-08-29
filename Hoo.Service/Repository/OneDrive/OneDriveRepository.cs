@@ -4,12 +4,12 @@ using Hoo.Service.Repository.GoogleDrive;
 
 namespace Hoo.Service.Repository.OneDrive
 {
-    public class OneDriveFileRepository : IOneDriveFileRepository
+    public class OneDriveRepository : IOneDriveRepository
     {
-        private readonly ILogger<OneDriveFileRepository> _logger;
+        private readonly ILogger<OneDriveRepository> _logger;
         private readonly HooDbContext _context;
 
-        public OneDriveFileRepository(ILogger<OneDriveFileRepository> logger, HooDbContext context)
+        public OneDriveRepository(ILogger<OneDriveRepository> logger, HooDbContext context)
         {
             _logger = logger;
             _context = context;

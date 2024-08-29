@@ -15,20 +15,20 @@ namespace Hoo.Service.Services.OneDrive
         private readonly GraphServiceClient _graphClientClient;
 
         private readonly ILogger<OneDriveService> _logger;
-        private readonly IOneDriveFileRepository _oneDriveFileRepository;
+        private readonly IOneDriveRepository _oneDriveRepository;
 
-        public OneDriveService(IConfiguration configuration, ILogger<OneDriveService> logger, IOneDriveFileRepository oneDriveFileRepository)
+        public OneDriveService(IConfiguration configuration, ILogger<OneDriveService> logger, IOneDriveRepository oneDriveRepository)
         {
             _driveId = configuration.GetValue<string>("DriveId");
             _graphClientClient = new GraphServiceClient(new SimpleAuthProvider(configuration.GetValue<string>("BearerToken")));
 
             _logger = logger;
-            _oneDriveFileRepository = oneDriveFileRepository;
+            _oneDriveRepository = oneDriveRepository;
         }
 
         public async Task<IEnumerable<OneDriveFileItem>> GetFilesAsync()
         {
-            return await _oneDriveFileRepository.GetFilesAsync();
+            return await _oneDriveRepository.GetFilesAsync();
         }
 
         public async Task SyncRemoteAsync()
@@ -52,7 +52,7 @@ namespace Hoo.Service.Services.OneDrive
                     {
                         if (item.File != null)
                         {
-                            _oneDriveFileRepository.AddFileAsync(new OneDriveFileItem
+                            _oneDriveRepository.AddFileAsync(new OneDriveFileItem
                             {
                                 Id = Guid.NewGuid(),
                                 OneDriveId = item.Id,
@@ -76,7 +76,7 @@ namespace Hoo.Service.Services.OneDrive
 
         public async Task<IActionResult> ClearCacheAsync()
         {
-            await _oneDriveFileRepository.DeleteAllFilesAsync();
+            await _oneDriveRepository.DeleteAllFilesAsync();
 
             return new OkResult();
         }

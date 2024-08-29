@@ -2,7 +2,7 @@
 
 namespace Hoo.Service.Repository.OneDrive
 {
-    public interface IOneDriveFileRepository
+    public interface IOneDriveRepository
     {
         Task<bool> AddFileAsync(OneDriveFileItem item);
 

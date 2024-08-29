@@ -9,6 +9,12 @@ namespace Hoo.Service.Repository.WebFiles
         
         Task<WebFileItem> GetFileAsync(Guid fileId);
 
+        Task<bool> DeleteFileAsync(Guid fileId);
+
+        bool HasFile(Guid fileId);
+
         Task<IEnumerable<WebFileItem>> GetFilesAsync();
+
+        Task<bool> DeleteFilesAsync(IEnumerable<WebFileItem> files);
     }
 }

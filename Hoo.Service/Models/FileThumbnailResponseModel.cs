@@ -4,7 +4,8 @@ namespace Hoo.Service.Models
 {
     public class FileThumbnailResponseModel
     {
-        public Guid Id { get; set; }
+        public Guid FileId { get; set; }
+
         public string ThumbnailUrl { get; set; }
     }
 }
