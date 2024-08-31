@@ -32,24 +32,26 @@ namespace Hoo.Service.Services
             _webFileRepository = webFileRepository;
         }
 
-        public async Task<FileThumbnailItem> GetFileThumbnailAsync(Guid fileId)
+        public async Task<FileThumbnailModel> GetFileThumbnailAsync(Guid fileId)
         {
+            // Google Drive file
             if (_googleDriveRepository.HasFile(fileId))
             {
                 var file = await _googleDriveRepository.GetFileAsync(fileId);
 
-                return new FileThumbnailItem
+                return new FileThumbnailModel
                 {
                     FileId = file.Id,
                     ThumbnailUrl = file.ThumbnailUri
                 };
             }
 
+            // Web file
             if (_webFileRepository.HasFile(fileId))
             {
                 var file = await _webFileRepository.GetFileAsync(fileId);
 
-                return new FileThumbnailItem
+                return new FileThumbnailModel
                 {
                     FileId = file.Id,
                     ThumbnailUrl = file.AccessUri.ToString()

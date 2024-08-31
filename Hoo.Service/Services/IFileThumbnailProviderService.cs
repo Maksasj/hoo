@@ -4,6 +4,6 @@ namespace Hoo.Service.Services
 {
     public interface IFileThumbnailProviderService
     {
-        Task<FileThumbnailItem> GetFileThumbnailAsync(Guid fileId);
+        Task<FileThumbnailModel> GetFileThumbnailAsync(Guid fileId);
     }
 }

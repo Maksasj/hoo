@@ -8,6 +8,7 @@ using Hoo.Service.Services.OneDrive;
 using Hoo.Service.Services.WebFiles;
 using HooService.Common;
 using Microsoft.EntityFrameworkCore;
+using Qilin.Service.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,9 @@ builder.Services.AddTransient<IWebFileService, WebFileService>();
 
 builder.Services.AddTransient<IFileProviderService, HooFileProviderService>();
 builder.Services.AddTransient<IFileThumbnailProviderService, HooFileThumbnailProviderService>();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddProvider(new MochiLoggerProvider());
 
 var app = builder.Build();
 

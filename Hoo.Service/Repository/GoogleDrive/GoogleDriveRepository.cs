@@ -36,7 +36,7 @@ namespace Hoo.Service.Repository.GoogleDrive
         {
             var file = await GetFileAsync(fileId);
 
-            if (fileId == null)
+            if (file == null)
                 return false;
 
             _context.GoogleDriveFiles.RemoveRange(file);

@@ -36,7 +36,7 @@ namespace Hoo.Service.Repository.WebFiles
         {
             var file = await GetFileAsync(fileId);
 
-            if(fileId == null)
+            if(file == null)
                 return false;
 
             _context.WebFiles.RemoveRange(file);

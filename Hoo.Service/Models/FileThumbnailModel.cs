@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Hoo.Service.Models
 {
-    public class FileThumbnailItem
+    public class FileThumbnailModel
     {   
         [Required]
         public Guid FileId { get; set; }
