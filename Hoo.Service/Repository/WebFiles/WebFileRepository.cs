@@ -19,7 +19,7 @@ namespace Hoo.Service.Repository.WebFiles
 
             var saveResult = await _context.SaveChangesAsync();
 
-            return !(saveResult == 1);
+            return saveResult == 1;
         }
 
         public async Task<WebFileItem> GetFileAsync(Guid fileId)

@@ -26,7 +26,10 @@ namespace HooService.Controllers
 
         [HttpPost]
         [Route("AddWebFile")]
-        public async Task<IActionResult> AddWebFile(Uri fileUri)
+        public async Task<IActionResult> AddWebFile(
+            [FromForm] 
+            Uri fileUri
+            )
         {
             await _webFileService.AddFileAsync(fileUri);
 
