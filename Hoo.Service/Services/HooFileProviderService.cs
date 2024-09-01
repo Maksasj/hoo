@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Hoo.Service.Services.GoogleDrive;
 using Hoo.Service.Services.WebFiles;
+using Microsoft.Graph.Models.Security;
 
 namespace HooService.Common
 {
@@ -38,6 +39,7 @@ namespace HooService.Common
             result.AddRange((await _webFileService.GetFilesAsync()).Select(file => new FileItemModel
             {
                 Id = file.Id,
+                SourceType = "WebFile",
                 Name = file.AccessUri.ToString()
             }));
 
@@ -46,6 +48,7 @@ namespace HooService.Common
             result.AddRange((await _googleDriveService.GetFilesAsync()).Select(file => new FileItemModel
             {
                 Id = file.Id,
+                SourceType = "GoogleDrive",
                 Name = file.Name
             }));
 
@@ -53,6 +56,7 @@ namespace HooService.Common
             result.AddRange((await _oneDriveService.GetFilesAsync()).Select(file => new FileItemModel
             {
                 Id = file.Id,
+                SourceType = "OneDrive",
                 Name = file.Name
             }));
 

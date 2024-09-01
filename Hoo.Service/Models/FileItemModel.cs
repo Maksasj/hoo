@@ -6,6 +6,8 @@ namespace Hoo.Service.Models
     {
         public Guid Id { get; set; }
 
+        public string SourceType { get; set; }
+
         public string Name { get; set; }
     }
 }
