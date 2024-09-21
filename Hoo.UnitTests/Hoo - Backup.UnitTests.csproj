@@ -27,4 +27,10 @@
     <ProjectReference Include="..\Hoo.Service\Hoo.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="NewFolder\" />
+    <Folder Include="Repository\" />
+  </ItemGroup>
+
 </Project>

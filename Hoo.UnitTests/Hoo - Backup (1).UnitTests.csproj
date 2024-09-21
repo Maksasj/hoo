@@ -27,4 +27,10 @@
     <ProjectReference Include="..\Hoo.Service\Hoo.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\GoogleDrive\" />
+    <Folder Include="Services\NewFolder\" />
+    <Folder Include="Services\OneDrive\" />
+  </ItemGroup>
+
 </Project>
