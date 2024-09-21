@@ -1,8 +1,15 @@
+using NUnit.Framework;
+
 namespace Hoo.UnitTests;
 
 public class UnitTest1
 {
-    [Fact]
+    [SetUp]
+    public void SetUp()
+    {
+    }
+
+    [Test]
     public void Test1()
     {
 
