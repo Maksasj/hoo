@@ -13,7 +13,7 @@ Cool looking widgets
 ### Links
 
 1. Source code available at [github.com/Maksasj/hoo](https://github.com/Maksasj/hoo)
-2. **🍡 mochi** logging microservice [github.com/Maksasj/mochi](https://github.com/Maksasj/bebmochione)
+2. **🍡 mochi** logging microservice [github.com/Maksasj/mochi](https://github.com/Maksasj/mochi)
 
 ## Features
 
