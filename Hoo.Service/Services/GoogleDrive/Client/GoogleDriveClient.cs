@@ -11,18 +11,13 @@ namespace Hoo.Service.Services.GoogleDrive.Client
 {
     public class GoogleDriveClient : IGoogleDriveClient
     {
-        private readonly ILogger<SourceController> _logger;
         private DriveService _driveService { get; }
+        private readonly ILogger<SourceController> _logger;
 
         public GoogleDriveClient(ILogger<SourceController> logger, IConfiguration configuration)
         {
             _logger = logger;
             _driveService = InitializeDriveService(configuration);
-        }
-        
-        public IGoogleDriveFileCollection GetFiles()
-        {
-            return new GoogleDriveFileCollection(_driveService);
         }
 
         private DriveService InitializeDriveService(IConfiguration configuration)
@@ -55,6 +50,11 @@ namespace Hoo.Service.Services.GoogleDrive.Client
                 HttpClientInitializer = credential,
                 ApplicationName = applicationName
             });
+        }
+
+        public IGoogleDriveFileCollection GetFiles()
+        {
+            return new GoogleDriveFileCollection(_driveService);
         }
     }
 }
