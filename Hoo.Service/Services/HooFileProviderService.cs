@@ -43,7 +43,6 @@ namespace HooService.Common
                 Name = file.AccessUri.ToString()
             }));
 
-
             // Google Drive files
             result.AddRange((await _googleDriveService.GetFilesAsync()).Select(file => new FileItemModel
             {

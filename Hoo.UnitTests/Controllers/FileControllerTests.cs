@@ -1,9 +1,4 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Kernel;
@@ -13,26 +8,10 @@ using Moq;
 using NUnit.Framework.Internal;
 using Hoo.Service.Services;
 using Microsoft.Extensions.Logging;
-
-public static class FixtureFactory
-{
-    public static Fixture Create(int recursionDepth = 2, bool configureMembers = true, bool configureThrowingRecursionBehavior = true)
-    {
-        Fixture fixture = new Fixture();
-        
-        fixture.Customize((ICustomization)new AutoMoqCustomization()
-        {
-            ConfigureMembers = configureMembers
-        });
-        
-        if (configureThrowingRecursionBehavior)
-            fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList<ThrowingRecursionBehavior>().ForEach((Action<ThrowingRecursionBehavior>)(throwingRecursionBehavior => fixture.Behaviors.Remove((ISpecimenBuilderTransformation)throwingRecursionBehavior)));
-        
-        fixture.Behaviors.Add((ISpecimenBuilderTransformation)new OmitOnRecursionBehavior(recursionDepth));
-        
-        return fixture;
-    }
-}
+using Hoo.Service.Models;
+using NUnit.Framework.Legacy;
+using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Hoo.UnitTests.Controllers
 {
@@ -42,6 +21,9 @@ namespace Hoo.UnitTests.Controllers
         private Mock<IFileProviderService> _fileProviderServiceStub;
         private Mock<IFileThumbnailProviderService> _fileThumbnailProviderServiceStub;
 
+        private FileThumbnailModel _fileThumbnailModelStub;
+        private Guid _fileIdStub;
+
         [SetUp]
         public void SetUp()
         {
@@ -50,6 +32,9 @@ namespace Hoo.UnitTests.Controllers
 
             _fileProviderServiceStub = _fixture.Freeze<Mock<IFileProviderService>>();
             _fileThumbnailProviderServiceStub = _fixture.Freeze<Mock<IFileThumbnailProviderService>>();
+
+            _fileThumbnailModelStub = _fixture.Create<FileThumbnailModel>();
+            _fileIdStub = _fixture.Create<Guid>();
         }
 
         [Theory]
@@ -63,6 +48,142 @@ namespace Hoo.UnitTests.Controllers
 
             // Assert
             _fileProviderServiceStub.Verify(mock => mock.GetFilesAsync(), Times.Once);
+        }
+
+        [Theory]
+        public async Task GetFileCount_FileProviderService_ExecutedOnce()
+        {
+            // Arrange
+            var fileControllerSut = _fixture.Create<FileController>();
+
+            // Act
+            var _ = await fileControllerSut.GetFileCount();
+
+            // Assert
+            _fileProviderServiceStub.Verify(mock => mock.GetFilesAsync(), Times.Once);
+        }
+
+        [Theory]
+        public async Task GetFiles_GetFirstPage_ReturnsValidPage()
+        {
+            // Arrange
+            var files = Enumerable.Repeat(_fixture.Create<FileItemModel>(), 100).ToArray();
+
+            _fileProviderServiceStub.Setup(mock => mock.GetFilesAsync()).ReturnsAsync(files);
+            
+            var fileControllerSut = _fixture.Create<FileController>();
+
+            // Act
+            var result = await fileControllerSut.GetFiles();
+
+            // Assert
+            ClassicAssert.IsInstanceOf<OkObjectResult>(result);
+            var actualResult = ((result as OkObjectResult).Value) as FileItemPageResponseModel;
+
+            ClassicAssert.AreEqual(0, actualResult.PageIndex);
+            ClassicAssert.AreEqual(100, actualResult.ItemCount);
+            ClassicAssert.AreEqual(files, actualResult.Files);
+        }
+
+        [Theory]
+        public async Task GetFiles_GetFirstPage_ReturnsOnlyFirstPage()
+        {
+            // Arrange
+            var files = Enumerable.Repeat(_fixture.Create<FileItemModel>(), 10000).ToArray();
+
+            _fileProviderServiceStub.Setup(mock => mock.GetFilesAsync()).ReturnsAsync(files);
+
+            var fileControllerSut = _fixture.Create<FileController>();
+
+            // Act
+            var result = await fileControllerSut.GetFiles();
+
+            // Assert
+            ClassicAssert.IsInstanceOf<OkObjectResult>(result);
+            var actualResult = ((result as OkObjectResult).Value) as FileItemPageResponseModel;
+
+            ClassicAssert.AreEqual(0, actualResult.PageIndex);
+            ClassicAssert.AreEqual(100, actualResult.ItemCount);
+            ClassicAssert.AreEqual(files.Take(100), actualResult.Files);
+        }
+
+        [Theory]
+        [TestCase(1, 100)]
+        [TestCase(3, 25)]
+        [TestCase(99, 100)]
+        [TestCase(999, 100)]
+        public async Task GetFiles_GetAnyPage_ReturnsOnlyRequestedPage(int pageIndex, int itemsPerPage)
+        {
+            // Arrange
+            var files = Enumerable.Repeat(_fixture.Create<FileItemModel>(), 10000).ToArray();
+            var expected = files.Skip(pageIndex * itemsPerPage).Take(itemsPerPage);
+
+            _fileProviderServiceStub.Setup(mock => mock.GetFilesAsync()).ReturnsAsync(files);
+
+            var fileControllerSut = _fixture.Create<FileController>();
+
+            // Act
+            var result = await fileControllerSut.GetFiles(pageIndex, itemsPerPage);
+
+            // Assert
+            ClassicAssert.IsInstanceOf<OkObjectResult>(result);
+            var actualResult = ((result as OkObjectResult).Value) as FileItemPageResponseModel;
+
+            ClassicAssert.AreEqual(pageIndex, actualResult.PageIndex);
+            ClassicAssert.AreEqual(expected.Count(), actualResult.ItemCount);
+            ClassicAssert.AreEqual(expected, actualResult.Files);
+        }
+
+        [Theory]
+        public async Task GetFileThumbnail_FileThumbnailProviderService_ExecutedOnce()
+        {
+            // Arrange
+            var fileControllerSut = _fixture.Create<FileController>();
+
+            _fileThumbnailProviderServiceStub.Setup(mock => mock.GetFileThumbnailAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(_fileThumbnailModelStub);
+
+            // Act
+            var _ = await fileControllerSut.GetFileThumbnail(_fileIdStub);
+
+            // Assert
+            _fileThumbnailProviderServiceStub.Verify(mock => mock.GetFileThumbnailAsync(It.IsAny<Guid>()), Times.Once);
+        }
+
+        [Theory]
+        public async Task GetFileThumbnail_ReturnsExpectedValue()
+        {
+            // Arrange
+            var fileControllerSut = _fixture.Create<FileController>();
+
+            _fileThumbnailProviderServiceStub.Setup(mock => mock.GetFileThumbnailAsync(_fileIdStub))
+                .ReturnsAsync(_fileThumbnailModelStub);
+
+            // Act
+            var result = await fileControllerSut.GetFileThumbnail(_fileIdStub);
+
+            // Assert
+            ClassicAssert.IsInstanceOf<OkObjectResult>(result);
+            var actualResult = ((result as OkObjectResult).Value) as FileThumbnailResponseModel;
+
+            ClassicAssert.AreEqual(_fileThumbnailModelStub.FileId, actualResult.FileId);
+            ClassicAssert.AreEqual(_fileThumbnailModelStub.ThumbnailUrl, actualResult.ThumbnailUrl);
+        }
+
+        [Theory]
+        public async Task GetFileThumbnail_FileDoesNotExist_ReturnsNull()
+        {
+            // Arrange
+            var fileControllerSut = _fixture.Create<FileController>();
+
+            _fileThumbnailProviderServiceStub.Setup(mock => mock.GetFileThumbnailAsync(It.IsAny<Guid>()))
+                .Returns(Task.FromResult<FileThumbnailModel>(null));
+
+            // Act
+            var result = await fileControllerSut.GetFileThumbnail(_fileIdStub);
+
+            // Assert
+            ClassicAssert.IsInstanceOf<BadRequestObjectResult>(result);
         }
     }
 }

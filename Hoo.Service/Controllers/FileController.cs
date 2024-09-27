@@ -26,42 +26,44 @@ namespace Hoo.Service.Controllers
 
         [HttpGet]
         [Route("GetFiles")]
-        public async Task<FileItemPageResponseModel> GetFiles(int pageIndex = 0, int itemsPerPage = 100)
+        public async Task<IActionResult> GetFiles(int pageIndex = 0, int itemsPerPage = 100)
         {
+            if (pageIndex < 0 || itemsPerPage < 0)
+                return new BadRequestObjectResult("Invalid page index or items per page");
+
             var files = (await _fileProviderService.GetFilesAsync())
                 .Skip(pageIndex * itemsPerPage)
-                .Take(itemsPerPage)
-                .ToArray();
+                .Take(itemsPerPage);
             
-            return new FileItemPageResponseModel
+            return new OkObjectResult(new FileItemPageResponseModel
             {
                 PageIndex = pageIndex,
-                ItemCount = files.Length,
+                ItemCount = files.Count(),
                 Files = files,
-            };
+            });
         }
 
         [HttpGet]
         [Route("GetFileCount")]
-        public async Task<long> GetFileCount()
+        public async Task<IActionResult> GetFileCount()
         {
-            return (await _fileProviderService.GetFilesAsync()).LongCount();
+            return new OkObjectResult((await _fileProviderService.GetFilesAsync()).LongCount());
         }
 
         [HttpGet]
         [Route("GetFileThumbnail")]
-        public async Task<FileThumbnailResponseModel> GetFileThumbnail(Guid fileId)
+        public async Task<IActionResult> GetFileThumbnail(Guid fileId)
         {
             var item = await _fileThumbnailProviderService.GetFileThumbnailAsync(fileId);
 
             if (item == null)
-                return null;
+                return new BadRequestObjectResult("File not found");
 
-            return new FileThumbnailResponseModel
+            return new OkObjectResult(new FileThumbnailResponseModel
             {
                 FileId = item.FileId,
                 ThumbnailUrl = item.ThumbnailUrl
-            };
+            });
         }
     }
 }
