@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HooService.Controllers
 {
     [ApiController]
-    public class UtilsController : ControllerBase
+    public class UtilsController
     {
         private readonly ILogger<UtilsController> _logger;
 
@@ -16,14 +16,14 @@ namespace HooService.Controllers
         [Route("Ping")]
         public async Task<IActionResult> Ping()
         {
-            return Ok();
+            return new OkResult();
         }
 
         [HttpGet]
         [Route("Health")]
         public async Task<IActionResult> GetHealth()
         {
-            return Ok();
+            return new OkResult();
         }
     }
 }

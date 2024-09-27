@@ -10,7 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace Hoo.Service.Controllers
 {
     [ApiController]
-    public class FileController : ControllerBase
+    public class FileController
     {
         private readonly ILogger<FileController> _logger;
 

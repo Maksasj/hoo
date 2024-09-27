@@ -6,7 +6,7 @@ using HooService.Common;
 namespace HooService.Controllers
 {
     [ApiController]
-    public class WebFileController : ControllerBase
+    public class WebFileController
     {
         private readonly ILogger<WebFileController> _logger;
         private readonly IWebFileService _webFileService;
@@ -33,7 +33,7 @@ namespace HooService.Controllers
         {
             await _webFileService.AddFileAsync(fileUri);
 
-            return Ok();
+            return new OkResult();
         }
     }
 }

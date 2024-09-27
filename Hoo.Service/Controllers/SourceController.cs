@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Hoo.Service.Controllers
 {
     [ApiController]
-    public class SourceController : ControllerBase
+    public class SourceController
     {
         private readonly IGoogleDriveService _googleDriveService;
         private readonly IOneDriveService _oneDriveService;
@@ -36,7 +36,7 @@ namespace Hoo.Service.Controllers
             // await _oneDriveService.SyncRemoteAsync();
             // await _webFileService.SyncRemote();
 
-            return Ok();
+            return new OkResult();
         }
 
         [HttpDelete]
@@ -46,7 +46,7 @@ namespace Hoo.Service.Controllers
             await _googleDriveService.ClearCacheAsync();
             await _oneDriveService.ClearCacheAsync();
 
-            return Ok();
+            return new OkResult();
         }
     }
 }
