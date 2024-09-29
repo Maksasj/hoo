@@ -1,9 +1,8 @@
 using Hoo.Service.Models;
 using Hoo.Service.Services.WebFiles;
 using Microsoft.AspNetCore.Mvc;
-using HooService.Common;
 
-namespace HooService.Controllers
+namespace Hoo.Service.Controllers
 {
     [ApiController]
     public class WebFileController : ControllerBase

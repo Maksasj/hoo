@@ -7,7 +7,7 @@ using Hoo.Service.Services.GoogleDrive;
 using Hoo.Service.Services.WebFiles;
 using Microsoft.Graph.Models.Security;
 
-namespace HooService.Common
+namespace Hoo.Service.Common
 {
     public class HooFileProviderService : IFileProviderService
     {

@@ -6,9 +6,9 @@ using Hoo.Service.Services;
 using Hoo.Service.Services.GoogleDrive;
 using Hoo.Service.Services.OneDrive;
 using Hoo.Service.Services.WebFiles;
-using HooService.Common;
 using Microsoft.EntityFrameworkCore;
-using Qilin.Service.Common;
+using Hoo.Service.Common;
+using Hoo.Service.Common.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,9 +27,12 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+ 
+// builder.Services.AddDbContext<HooDbContext>(options =>
+//    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddDbContext<HooDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddTransient<IWebFileRepository, WebFileRepository>();
 builder.Services.AddTransient<IGoogleDriveRepository, GoogleDriveRepository>();
@@ -50,11 +53,12 @@ var app = builder.Build();
 app.UseCors("AllowAllOrigins");
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+// if (app.Environment.IsDevelopment())
+// {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+    app.ApplyMigrations();
+// }
 
 // app.UseHttpsRedirection();
 

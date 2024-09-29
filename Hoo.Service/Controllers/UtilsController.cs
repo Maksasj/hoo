@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace HooService.Controllers
+namespace Hoo.Service.Controllers
 {
     [ApiController]
     public class UtilsController : ControllerBase

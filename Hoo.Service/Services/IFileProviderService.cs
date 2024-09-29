@@ -2,7 +2,7 @@
 using Hoo.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HooService.Common
+namespace Hoo.Service.Common
 {
     public interface IFileProviderService
     {

@@ -1,4 +1,4 @@
-﻿namespace Qilin.Service.Common
+﻿namespace Hoo.Service.Common
 {
     public class MochiLoggerProvider : ILoggerProvider
     {
