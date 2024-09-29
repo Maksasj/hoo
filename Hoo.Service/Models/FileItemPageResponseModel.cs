@@ -6,6 +6,6 @@
 
         public int ItemCount { get; set; }
 
-        public FileItemModel[] Files { get; set; }
+        public IEnumerable<FileItemModel> Files { get; set; }
     }
 }

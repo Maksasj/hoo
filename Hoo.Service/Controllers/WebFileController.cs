@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Hoo.Service.Controllers
 {
     [ApiController]
-    public class WebFileController : ControllerBase
+    public class WebFileController
     {
         private readonly ILogger<WebFileController> _logger;
         private readonly IWebFileService _webFileService;
@@ -32,7 +32,7 @@ namespace Hoo.Service.Controllers
         {
             await _webFileService.AddFileAsync(fileUri);
 
-            return Ok();
+            return new OkResult();
         }
     }
 }
