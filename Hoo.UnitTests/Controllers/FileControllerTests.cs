@@ -2,8 +2,8 @@
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Kernel;
+using Hoo.Service.Common;
 using Hoo.Service.Controllers;
-using HooService.Common;
 using Moq;
 using NUnit.Framework.Internal;
 using Hoo.Service.Services;
